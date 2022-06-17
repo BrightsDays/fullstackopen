@@ -1,17 +1,9 @@
-const Header = (props) => {
-  return (
-    <h1>{props.course}</h1>
-  )
-}
+const Header = ({ course }) => <h1>{course}</h1>
 
-const Part = (props) => {
-  return (
-    <p>{props.name} {props.number}</p>
-  )
-}
+const Part = ({ name, number }) => <p>{name} {number}</p>
 
-const Content = (props) => {
-  const parts = props.parts.map((item, index) => {
+const Content = ({ parts }) => {
+  const list = parts.map((item, index) => {
     return (
       <Part 
         key={`con_${index}`}
@@ -23,16 +15,14 @@ const Content = (props) => {
 
   return (
     <div>
-      {parts}
+      {list}
     </div>
   )
 }
 
-const Total = (props) => {
+const Total = ({ parts }) => {
   let number = 0
-  props.parts.forEach(item => {
-    number += item.exercises
-  });
+  parts.forEach(item => number += item.exercises)
 
   return (
     <p>Number of exercises {number}</p>
@@ -57,12 +47,13 @@ const App = () => {
       }
     ]
   }
+  const { name, parts } = course
 
   return (
     <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
+      <Header course={name} />
+      <Content parts={parts} />
+      <Total parts={parts} />
     </div>
   )
 }
