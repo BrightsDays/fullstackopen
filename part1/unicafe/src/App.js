@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Title = ({ title }) => <h1>{title}</h1>
+const Title = ({ text }) => <h1>{text}</h1>
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 const StatisticLine = ({ text, value }) => {
   return (
@@ -28,7 +28,7 @@ const Statistic = ({ feedback }) => {
 
   return (
     <div>
-      <Title title='statistics' />
+      <Title text='statistics' />
       {all === 0 && 
         <p>no feedback given</p>}
       {all > 0 && 
@@ -59,7 +59,7 @@ const App = () => {
 
   return (
     <div>
-      <Title title='give feedback' />
+      <Title text='give feedback' />
       <Button onClick={addGood()} text='good' />
       <Button onClick={addNeutral()} text='neutral' />
       <Button onClick={addBad()} text='bad' />
