@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import SearchFilter from './components/SearchFilter'
 import NumbersList from './components/NumbersList'
 import AddForm from './components/AddForm'
+import contacts from './services/contacts'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,10 +11,10 @@ const App = () => {
   const [alert, setAlert] = useState(false)
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => setPersons(response.data))
-  })
+    contacts
+      .getList()
+      .then(response => setPersons(response))
+  }, [])
 
   const handleChange = (event, type) => {
     setAlert(false)
@@ -31,8 +31,11 @@ const App = () => {
         id: persons.length + 1,
       }
 
-      setPersons(persons.concat(nameObject))
       setNewPerson({name: '', number: ''})
+
+      contacts
+        .create(nameObject)
+        .then(response => setPersons([...persons, response]))
     } else if (newPerson.name && newPerson.number) {
       setAlert(true)
     }
