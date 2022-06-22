@@ -5,28 +5,24 @@ const getList = async () => {
     const request = axios.get(baseUrl)
     return request
         .then(response => response.data)
-        .catch(error => console.log('error'))
 }
 
 const create = async newObject => {
     const request = axios.post(baseUrl, newObject)
     return request
         .then(response => response.data)
-        .catch(error => console.log('error'))
 }
 
 const update = async (id, newObject) => {
     const request = axios.put(`${baseUrl}/${id}`, newObject)
     return request
         .then(response => response.data)
-        .catch(error => console.log('error'))
 }
 
 const deleteContact = async id => {
     const request = axios.delete(`${baseUrl}/${id}`)
     return request
         .then(response => response.data)
-        .catch(error => console.log('error'))
 }
 
 export default { getList, create, update, deleteContact }

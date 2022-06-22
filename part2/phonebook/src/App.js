@@ -3,11 +3,13 @@ import SearchFilter from './components/SearchFilter'
 import NumbersList from './components/NumbersList'
 import AddForm from './components/AddForm'
 import contacts from './services/contacts'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newPerson, setNewPerson] = useState({name: '',number: ''})
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState(null)
 
   const getList = () => {
     contacts
@@ -36,7 +38,11 @@ const App = () => {
       if (!duplicate.length) {
         await contacts
           .create(nameObject)
-          .then(setNewPerson({name: '', number: ''}))
+          .then(
+            setNewPerson({name: '', number: ''}), 
+            showMessage(`Added ${nameObject.name}`, 'info')
+          )
+          .catch(error => showMessage('Server contains a note with this ID'))
 
         getList()
       } else {
@@ -44,6 +50,7 @@ const App = () => {
           await contacts
             .update(duplicate[0].id, nameObject)
             .then(setNewPerson({name: '', number: ''}))
+            .catch(error => showMessage('Person was already removed from server'))
 
           getList()
         }
@@ -55,10 +62,19 @@ const App = () => {
 
   const deletePerson = async (id) => {
     if (window.confirm('Delete person?')) {
-      await contacts.deleteContact(id)
-      
+      await contacts
+        .deleteContact(id)
+        .catch(error => showMessage('Person was already removed from server'))
       getList()
     }
+  }
+
+  const showMessage = (content, type) => {
+    type === 'info' ? 
+      setMessage({text: content, type: 'info'}) :
+      setMessage({text: content, type: 'error'})
+
+    setTimeout(() => setMessage(null), 5000)
   }
 
   return (
@@ -68,6 +84,8 @@ const App = () => {
         filter={filter} 
         onChange={event => setFilter(event.target.value)} 
       />
+      {message && 
+        <div className={`message ${message.type}`}>{message.text}</div>}
       <h2>Add a new</h2>
       <AddForm 
         newName={newPerson.name}
