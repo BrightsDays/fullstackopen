@@ -8,36 +8,56 @@ const App = () => {
   const [persons, setPersons] = useState([])
   const [newPerson, setNewPerson] = useState({name: '',number: ''})
   const [filter, setFilter] = useState('')
-  const [alert, setAlert] = useState(false)
 
-  useEffect(() => {
+  const getList = () => {
     contacts
       .getList()
       .then(response => setPersons(response))
-  }, [])
+  }
+
+  useEffect(() => getList(), [])
 
   const handleChange = (event, type) => {
-    setAlert(false)
     setNewPerson({...newPerson, [type]: event.target.value})
   }
 
-  const addPerson = (event) => {
+  const createPerson = async event => {
     event.preventDefault()
 
-    if (newPerson.name && newPerson.number && !persons.filter(person => person.name === newPerson.name).length) {
+    const duplicate = persons.filter(person => person.name === newPerson.name)
+
+    if (newPerson.name && newPerson.number) {
       const nameObject = {
         name: newPerson.name,
         number: newPerson.number,
         id: persons.length + 1,
       }
 
-      setNewPerson({name: '', number: ''})
+      if (!duplicate.length) {
+        await contacts
+          .create(nameObject)
+          .then(setNewPerson({name: '', number: ''}))
 
-      contacts
-        .create(nameObject)
-        .then(response => setPersons([...persons, response]))
-    } else if (newPerson.name && newPerson.number) {
-      setAlert(true)
+        getList()
+      } else {
+        if (window.confirm('Update person info?')) {
+          await contacts
+            .update(duplicate[0].id, nameObject)
+            .then(setNewPerson({name: '', number: ''}))
+
+          getList()
+        }
+      }
+
+      setNewPerson({name: '', number: ''})
+    }
+  }
+
+  const deletePerson = async (id) => {
+    if (window.confirm('Delete person?')) {
+      await contacts.deleteContact(id)
+      
+      getList()
     }
   }
 
@@ -54,13 +74,13 @@ const App = () => {
         newNumber={newPerson.number}
         onChangeName={event => handleChange(event, 'name')}
         onChangeNumber={event => handleChange(event, 'number')}
-        onSubmit={event => addPerson(event)}
-        alert={alert}
+        onSubmit={event => createPerson(event)}
       />
       <h2>Numbers</h2>
       <NumbersList 
         persons={persons} 
         filter={filter} 
+        onClick={(id) => deletePerson(id)}
       />
     </div>
   )

@@ -1,4 +1,4 @@
-const AddForm = ({ newName, newNumber, onChangeName, onChangeNumber, onSubmit, alert}) => {
+const AddForm = ({ newName, newNumber, onChangeName, onChangeNumber, onSubmit }) => {
     return (
         <form onSubmit={onSubmit}>
             <div>
@@ -12,7 +12,6 @@ const AddForm = ({ newName, newNumber, onChangeName, onChangeNumber, onSubmit, a
                 value={newNumber} 
                 onChange={onChangeNumber} />
             </div>
-            {alert && <p>{newName} already added in phonebook</p>}
             </div>
             <div>
             <button type="submit">add</button>
