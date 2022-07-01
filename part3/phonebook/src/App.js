@@ -31,8 +31,7 @@ const App = () => {
     if (newPerson.name && newPerson.number) {
       const nameObject = {
         name: newPerson.name,
-        number: newPerson.number,
-        id: persons.length + 1,
+        number: newPerson.number
       }
 
       if (!duplicate.length) {
@@ -42,14 +41,17 @@ const App = () => {
             setNewPerson({name: '', number: ''}), 
             showMessage(`Added ${nameObject.name}`, 'info')
           )
-          .catch(error => showMessage('Server contains a note with this ID'))
+          .catch(error => showMessage('Server not respond'))
 
         getList()
       } else {
         if (window.confirm('Update person info?')) {
           await contacts
             .update(duplicate[0].id, nameObject)
-            .then(setNewPerson({name: '', number: ''}))
+            .then(() => {
+              showMessage(`Updated ${nameObject.name}`, 'info')
+              setNewPerson({name: '', number: ''})
+            })
             .catch(error => showMessage('Person was already removed from server'))
 
           getList()
@@ -64,7 +66,8 @@ const App = () => {
     if (window.confirm('Delete person?')) {
       await contacts
         .deleteContact(id)
-        .catch(error => showMessage('Person was already removed from server'))
+        .then(() => showMessage(`Person deleted`, 'info'))
+        .catch(error => console.log(error))
       getList()
     }
   }
