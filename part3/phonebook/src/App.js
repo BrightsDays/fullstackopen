@@ -37,22 +37,30 @@ const App = () => {
       if (!duplicate.length) {
         await contacts
           .create(nameObject)
-          .then(
-            setNewPerson({name: '', number: ''}), 
-            showMessage(`Added ${nameObject.name}`, 'info')
-          )
-          .catch(error => showMessage('Server not respond'))
+          .then(response => {
+            if (Object.keys(response).length) {
+              setNewPerson({name: '', number: ''})
+              showMessage('info', `Added ${nameObject.name}`)
+            }
+          })
+          .catch(error => {
+            showMessage(error.response.status, error.response.data.match(/(?<=ValidationError: )(.*?)(?=<br>)/s)[0])
+          })
 
         getList()
       } else {
         if (window.confirm('Update person info?')) {
           await contacts
             .update(duplicate[0].id, nameObject)
-            .then(() => {
-              showMessage(`Updated ${nameObject.name}`, 'info')
-              setNewPerson({name: '', number: ''})
+            .then(response => {
+              if (Object.keys(response).length) {
+                showMessage('info', `Updated ${nameObject.name}`)
+                setNewPerson({name: '', number: ''})
+              }
             })
-            .catch(error => showMessage('Person was already removed from server'))
+            .catch(error => {
+              showMessage(error.response.status, error.response.data.match(/(?<=ValidationError: )(.*?)(?=<br>)/s)[0])
+            })
 
           getList()
         }
@@ -66,18 +74,20 @@ const App = () => {
     if (window.confirm('Delete person?')) {
       await contacts
         .deleteContact(id)
-        .then(() => showMessage(`Person deleted`, 'info'))
+        .then(() => showMessage('info', `Person deleted`))
         .catch(error => console.log(error))
       getList()
     }
   }
 
-  const showMessage = (content, type) => {
-    type === 'info' ? 
-      setMessage({text: content, type: 'info'}) :
+  const showMessage = (type, content) => {
+    if (type === 'info') {
+      setMessage({text: content, type: 'info'})
+    } else {
       setMessage({text: content, type: 'error'})
+    }
 
-    setTimeout(() => setMessage(null), 5000)
+    setTimeout(() => setMessage(null), 7000)
   }
 
   return (
