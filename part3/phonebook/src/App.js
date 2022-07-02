@@ -38,14 +38,12 @@ const App = () => {
         await contacts
           .create(nameObject)
           .then(response => {
-            if (Object.keys(response).length) {
+            if (response) {
               setNewPerson({name: '', number: ''})
-              showMessage('info', `Added ${nameObject.name}`)
+              showMessage(`Added ${nameObject.name}`, 'info')
             }
           })
-          .catch(error => {
-            showMessage(error.response.status, error.response.data.match(/(?<=ValidationError: )(.*?)(?=<br>)/s)[0])
-          })
+          .catch(error => showMessage(error.response.data.error))
 
         getList()
       } else {
@@ -53,20 +51,16 @@ const App = () => {
           await contacts
             .update(duplicate[0].id, nameObject)
             .then(response => {
-              if (Object.keys(response).length) {
-                showMessage('info', `Updated ${nameObject.name}`)
+              if (response) {
+                showMessage(`Updated ${nameObject.name}`, 'info')
                 setNewPerson({name: '', number: ''})
               }
             })
-            .catch(error => {
-              showMessage(error.response.status, error.response.data.match(/(?<=ValidationError: )(.*?)(?=<br>)/s)[0])
-            })
+            .catch(error =>  showMessage(error.response.data.error))
 
           getList()
         }
       }
-
-      setNewPerson({name: '', number: ''})
     }
   }
 
@@ -74,18 +68,16 @@ const App = () => {
     if (window.confirm('Delete person?')) {
       await contacts
         .deleteContact(id)
-        .then(() => showMessage('info', `Person deleted`))
+        .then(() => showMessage(`Person deleted`, 'info'))
         .catch(error => console.log(error))
       getList()
     }
   }
 
-  const showMessage = (type, content) => {
-    if (type === 'info') {
-      setMessage({text: content, type: 'info'})
-    } else {
-      setMessage({text: content, type: 'error'})
-    }
+  const showMessage = (content, type) => {
+    type === 'info'
+      ? setMessage({text: content, type: 'info'})
+      : setMessage({text: content, type: 'error'})
 
     setTimeout(() => setMessage(null), 7000)
   }
