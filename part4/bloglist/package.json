@@ -10,7 +10,8 @@
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
     "logs:prod": "heroku logs --tail",
     "lint": "eslint .",
-    "test": "NODE_ENV=test jest --verbose --runInBand --forceExit"
+    "test": "NODE_ENV=test jest --verbose --runInBand --forceExit",
+    "test_blog": "NODE_ENV=test jest -- tests/bloglist_api.test.js"
   },
   "license": "ISC",
   "devDependencies": {
@@ -23,6 +24,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "express-async-errors": "^3.1.1",
     "mongoose": "^6.4.1",
     "morgan": "^1.10.0"
   },
