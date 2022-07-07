@@ -72,4 +72,30 @@ test('missed like property have default value 0', async () => {
   expect(request.body.likes === 0)
 })
 
+test('blog cant be created without title or url', async () => {
+  const blogWithoutUrl = {
+    title: 'Post',
+    author: 'Jim',
+    likes: 3
+  }
+  const blogWithoutTitle = {
+    author: 'Jim',
+    url: 'http://url3.com',
+    likes: 3
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(blogWithoutUrl)
+    .expect(400)
+
+  await api
+    .post('/api/blogs')
+    .send(blogWithoutTitle)
+    .expect(400)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+})
+
 afterAll(() => mongoose.connection.close())
