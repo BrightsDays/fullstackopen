@@ -4,6 +4,27 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const config = require('../utils/config')
+let token = ''
+
+beforeAll(async () => {
+  await User.deleteMany({})
+
+  const saltRounds = 10
+  const passwordHash = await bcrypt.hash('qwerty', saltRounds)
+
+  const user = await new User({
+    username: 'user',
+    name: 'user',
+    passwordHash
+  }).save()
+  const userForToken = { username: user.username, id: user._id }
+
+  token = jwt.sign(userForToken, config.SECRET)
+})
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -42,6 +63,7 @@ describe('crud tests', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -86,11 +108,24 @@ describe('crud tests', () => {
   })
 
   test('single blog can be deleted', async() => {
+    const newBlog = {
+      title: 'Post 3',
+      author: 'Jim',
+      url: 'http://url3.com',
+      likes: 3
+    }
+
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
+      .send(newBlog)
+
     const responseBeforeDel = await api.get('/api/blogs')
-    const id = responseBeforeDel.body[0].id
+    const id = responseBeforeDel.body[2].id
 
     await api
       .delete(`/api/blogs/${id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
 
     const responseAfterDel = await api.get('/api/blogs')
@@ -109,6 +144,7 @@ describe('validation tests', () => {
 
     const request = await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -130,11 +166,13 @@ describe('validation tests', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(blogWithoutUrl)
       .expect(400)
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(blogWithoutTitle)
       .expect(400)
 
