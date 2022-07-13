@@ -27,36 +27,24 @@ const BlogForm = ({ createBlog }) => {
     }))
   }
 
+  const inputsList = Object.keys(blog).map(input => {
+    return (
+      <div key={input}>
+        <label htmlFor={input}>{input}:</label>
+        <input
+          type='text'
+          id={input}
+          value={blog[input]}
+          onChange={({ target }) => handleChange(target.value, input)}
+        />
+      </div>
+    )
+  })
+
   return (
     <form onSubmit={addBlog}>
       <h2>Create new</h2>
-      <div>
-        <label htmlFor='title'>title:</label>
-        <input
-          type='text'
-          id='title'
-          value={blog.title}
-          onChange={({ target }) => handleChange(target.value, 'title')}
-        />
-      </div>
-      <div>
-        <label htmlFor='author'>author:</label>
-        <input
-          type='text'
-          id='author'
-          value={blog.author}
-          onChange={({ target }) => handleChange(target.value, 'author')}
-        />
-      </div>
-      <div>
-        <label htmlFor='url'>url:</label>
-        <input
-          type='text'
-          id='url'
-          value={blog.url}
-          onChange={({ target }) => handleChange(target.value, 'url')}
-        />
-      </div>
+      {inputsList}
       <button>create</button>
     </form>
   )
