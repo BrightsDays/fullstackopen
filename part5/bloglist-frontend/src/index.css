@@ -16,3 +16,7 @@
     color: rgb(15, 146, 41);
     border: 2px solid rgb(15, 146, 41);
 }
+
+.hidden {
+    display: none;
+}

@@ -4,6 +4,7 @@ import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import CreateBlog from './components/CreateBlog'
+import Toglable from './components/Togglable'
 import './index.css'
 
 const App = () => {
@@ -81,9 +82,8 @@ const App = () => {
 
     if (blog.title && blog.author && blog.url) {
       await blogService.create(blog)
-      blogService.getAll().then(blogs =>
-        setBlogs( blogs )
-      )
+      blogService.getAll().then(blogs => setBlogs( blogs ))
+
       showMessage(`a new blog ${blog.title} by ${blog.author} added`, 'info')
     } else {
       showMessage('fill in all fields', 'error')
@@ -109,13 +109,15 @@ const App = () => {
           : <div>
               <p>{user.username} is logged in</p>
               <button onClick={() => handleLogout()}>log out</button>
-              <CreateBlog
-                blog={blog}
-                handleTitle={({ target }) => handleChange(target.value, 'title')}
-                handleAuthor={({ target }) => handleChange(target.value, 'author')}
-                handleUrl={({ target }) => handleChange(target.value, 'url')}
-                handleSubmit={(event) => handleCreate(event)}
-              />
+              <Toglable label='new blog'>
+                <CreateBlog
+                  blog={blog}
+                  handleTitle={({ target }) => handleChange(target.value, 'title')}
+                  handleAuthor={({ target }) => handleChange(target.value, 'author')}
+                  handleUrl={({ target }) => handleChange(target.value, 'url')}
+                  handleSubmit={(event) => handleCreate(event)}
+                />
+              </Toglable>
               <BlogList 
                 blogs={blogs} 
                 username={user.username}
