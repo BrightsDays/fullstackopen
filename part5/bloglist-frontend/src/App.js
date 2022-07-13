@@ -3,7 +3,7 @@ import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import CreateBlog from './components/CreateBlog'
+import BlogForm from './components/BlogForm'
 import Toglable from './components/Togglable'
 import './index.css'
 
@@ -15,11 +15,6 @@ const App = () => {
   const [message, setMessage] = useState({
     content: '',
     type: ''
-  })
-  const [blog, setBlog] = useState({
-    title: '',
-    author: '',
-    url: ''
   })
 
   useEffect(() => {
@@ -39,9 +34,6 @@ const App = () => {
 
   const handleUsername = (value) => setUsername(value)
   const handlePassword = (value) => setPassword(value)
-  const handleChange = (value, type) => {
-    setBlog({...blog, [type]: value})
-  }
 
   const showMessage = (content, type) => {
     setMessage({ content, type })
@@ -77,9 +69,7 @@ const App = () => {
     window.localStorage.removeItem('loggedUser')
   }
 
-  const handleCreate = async (event) => {
-    event.preventDefault()
-
+  const createBlog = async (blog) => {
     if (blog.title && blog.author && blog.url) {
       await blogService.create(blog)
       blogService.getAll().then(blogs => setBlogs( blogs ))
@@ -110,13 +100,7 @@ const App = () => {
               <p>{user.username} is logged in</p>
               <button onClick={() => handleLogout()}>log out</button>
               <Toglable label='new blog'>
-                <CreateBlog
-                  blog={blog}
-                  handleTitle={({ target }) => handleChange(target.value, 'title')}
-                  handleAuthor={({ target }) => handleChange(target.value, 'author')}
-                  handleUrl={({ target }) => handleChange(target.value, 'url')}
-                  handleSubmit={(event) => handleCreate(event)}
-                />
+                <BlogForm createBlog={createBlog} />
               </Toglable>
               <BlogList 
                 blogs={blogs} 
