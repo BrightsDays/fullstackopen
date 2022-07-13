@@ -1,4 +1,4 @@
-const LoginForm = ({ username, password, onChangeUsername, onChangePassword, onSubmit, errorMessage }) => {
+const LoginForm = ({ username, password, onChangeUsername, onChangePassword, onSubmit }) => {
   return (
     <form onSubmit={onSubmit}>
       <div>
@@ -20,10 +20,6 @@ const LoginForm = ({ username, password, onChangeUsername, onChangePassword, onS
         />
       </div>
       <button>login</button>
-      {
-        errorMessage &&
-          <p className='error'>{errorMessage}</p>
-      }
     </form>
   )
 }
