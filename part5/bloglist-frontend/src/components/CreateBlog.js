@@ -1,6 +1,6 @@
-const CreateBlog = ({ blog, onChangeTitle, onChangeAuthor, onChangeUrl, onSubmit }) => {
+const CreateBlog = ({ blog, handleTitle, handleAuthor, handleUrl, handleSubmit }) => {
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit}>
       <h2>Create new</h2>
       <div>
         <label htmlFor='title'>title:</label>
@@ -8,7 +8,7 @@ const CreateBlog = ({ blog, onChangeTitle, onChangeAuthor, onChangeUrl, onSubmit
           type='text'
           id='title'
           value={blog.title}
-          onChange={onChangeTitle}
+          onChange={handleTitle}
         />
       </div>
       <div>
@@ -17,7 +17,7 @@ const CreateBlog = ({ blog, onChangeTitle, onChangeAuthor, onChangeUrl, onSubmit
           type='text'
           id='author'
           value={blog.author}
-          onChange={onChangeAuthor}
+          onChange={handleAuthor}
         />
       </div>
       <div>
@@ -26,7 +26,7 @@ const CreateBlog = ({ blog, onChangeTitle, onChangeAuthor, onChangeUrl, onSubmit
           type='text'
           id='url'
           value={blog.url}
-          onChange={onChangeUrl}
+          onChange={handleUrl}
         />
       </div>
       <button>create</button>

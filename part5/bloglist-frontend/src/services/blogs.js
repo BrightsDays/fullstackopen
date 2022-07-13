@@ -18,7 +18,7 @@ const create = async blogPost => {
   }
 
   const request = await axios.post(baseUrl, blogPost, config)
-  return request.then(response => response.data)
+  return request.data
 }
 
 export default {

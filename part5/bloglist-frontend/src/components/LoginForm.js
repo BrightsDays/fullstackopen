@@ -1,13 +1,13 @@
-const LoginForm = ({ username, password, onChangeUsername, onChangePassword, onSubmit }) => {
+const LoginForm = ({ username, password, handleUsername, handlePassword, handleSubmit }) => {
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor='login'>login:</label>
         <input
           type='text'
           id='login'
           value={username}
-          onChange={onChangeUsername}
+          onChange={handleUsername}
         />
       </div>
       <div>
@@ -16,7 +16,7 @@ const LoginForm = ({ username, password, onChangeUsername, onChangePassword, onS
           type='password'
           id='password'
           value={password}
-          onChange={onChangePassword}
+          onChange={handlePassword}
         />
       </div>
       <button>login</button>

@@ -76,13 +76,18 @@ const App = () => {
     window.localStorage.removeItem('loggedUser')
   }
 
-  const handleCreate = (event) => {
+  const handleCreate = async (event) => {
     event.preventDefault()
-    blogService.create(blog)
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-    showMessage(`a new blog ${blog.title} by ${blog.author} added`, 'info')
+
+    if (blog.title && blog.author && blog.url) {
+      await blogService.create(blog)
+      blogService.getAll().then(blogs =>
+        setBlogs( blogs )
+      )
+      showMessage(`a new blog ${blog.title} by ${blog.author} added`, 'info')
+    } else {
+      showMessage('fill in all fields', 'error')
+    }
   }
 
   return (
@@ -97,19 +102,19 @@ const App = () => {
           ? <LoginForm
               login={username}
               password={password}
-              onChangeUsername={({ target }) => handleUsername(target.value)}
-              onChangePassword={({ target }) => handlePassword(target.value)}
-              onSubmit={(event) => handleLogin(event)}
+              handleUsername={({ target }) => handleUsername(target.value)}
+              handlePassword={({ target }) => handlePassword(target.value)}
+              handleSubmit={(event) => handleLogin(event)}
             />
           : <div>
               <p>{user.username} is logged in</p>
               <button onClick={() => handleLogout()}>log out</button>
               <CreateBlog
                 blog={blog}
-                onChangeTitle={({ target }) => handleChange(target.value, 'title')}
-                onChangeAuthor={({ target }) => handleChange(target.value, 'author')}
-                onChangeUrl={({ target }) => handleChange(target.value, 'url')}
-                onSubmit={(event) => handleCreate(event)}
+                handleTitle={({ target }) => handleChange(target.value, 'title')}
+                handleAuthor={({ target }) => handleChange(target.value, 'author')}
+                handleUrl={({ target }) => handleChange(target.value, 'url')}
+                handleSubmit={(event) => handleCreate(event)}
               />
               <BlogList 
                 blogs={blogs} 
