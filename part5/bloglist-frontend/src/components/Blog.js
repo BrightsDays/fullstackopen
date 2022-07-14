@@ -1,28 +1,24 @@
-import Toglable from './Togglable'
-import blogService from '../services/blogs'
+import Togglable from './Togglable'
 
-const Blog = ({ blog, blogUpdated }) => {
-  const addLike = async () => {
-      const newBlog = {...blog, likes: blog.likes + 1}
-
-      await blogService.update(newBlog)
-      blogUpdated()
-  }
-
+const Blog = ({ blog, addLike, deleteBlog, userName }) => {
   return (
     <div className="blog__item">
       <p>{blog.title} {blog.author}</p>
 
-      <Toglable showLabel='view' hideLabel='hide'>
+      <Togglable showLabel='view' hideLabel='hide'>
         <p>{blog.url}</p>
 
         <div className="button-box">
           <p>likes: {blog.likes}</p>
-          <button onClick={addLike}>like</button>
+          <button onClick={() => addLike(blog)}>like</button>
         </div>
         
         <p>{blog.user.username}</p>
-      </Toglable>
+        {
+          userName === blog.user.username &&
+            <button onClick={() => deleteBlog(blog.id)}>delete</button>
+        }
+      </Togglable>
     </div>  
   )
 }

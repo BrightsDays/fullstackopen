@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
-import Toglable from './components/Togglable'
+import Togglable from './components/Togglable'
 import './index.css'
 
 const App = () => {
@@ -33,6 +33,8 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const addBlogRef = useRef()
 
   const handleUsername = (value) => setUsername(value)
   const handlePassword = (value) => setPassword(value)
@@ -73,6 +75,7 @@ const App = () => {
 
   const createBlog = async (blog) => {
     if (blog.title && blog.author && blog.url) {
+      addBlogRef.current()
       await blogService.create(blog)
       getBlogs()
 
@@ -81,6 +84,20 @@ const App = () => {
       showMessage('fill in all fields', 'error')
     }
   }
+
+  const deleteBlog = async (id) => {
+    if (window.confirm('Delete blog?')) {
+      await blogService.deleteBlog(id)
+      getBlogs()
+    }
+  }
+
+  const addLike = async (blog) => {
+    const newBlog = {...blog, likes: blog.likes + 1}
+
+    await blogService.update(newBlog)
+    getBlogs()
+}
 
   return (
     <div>
@@ -101,12 +118,19 @@ const App = () => {
           : <div>
               <p>{user.username} is logged in</p>
               <button onClick={() => handleLogout()}>log out</button>
-              <Toglable showLabel='new blog' hideLabel='cancel'>
+              <Togglable
+                showLabel='new blog' 
+                hideLabel='cancel'
+                ref={addBlogRef}
+              >
                 <BlogForm createBlog={createBlog} />
-              </Toglable>
+              </Togglable>
               <BlogList 
                 blogs={blogs}
+                userName={user.username}
                 updateBlogs={getBlogs}
+                addLike={blog => addLike(blog)}
+                deleteBlog={id => deleteBlog(id)}
               />
             </div>
       }
