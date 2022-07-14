@@ -8,11 +8,11 @@ const Toglable = (props) => {
   return (
     <div>
       <div className={visible ? 'hidden' : ''}>
-        <button onClick={toggleVisibility}>{props.label}</button>
+        <button className='toggle-button' onClick={toggleVisibility}>{props.showLabel}</button>
       </div>
       <div className={visible ? '' : 'hidden'}>
         { props.children }
-        <button onClick={toggleVisibility}>cancel</button>
+        <button className='toggle-button' onClick={toggleVisibility}>{props.hideLabel}</button>
       </div>
     </div>
   )

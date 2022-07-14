@@ -17,11 +17,13 @@ const App = () => {
     type: ''
   })
 
-  useEffect(() => {
+  const getBlogs = () => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )
-  }, [])
+  }
+
+  useEffect(() => getBlogs(), [])
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')
 
@@ -72,7 +74,7 @@ const App = () => {
   const createBlog = async (blog) => {
     if (blog.title && blog.author && blog.url) {
       await blogService.create(blog)
-      blogService.getAll().then(blogs => setBlogs( blogs ))
+      getBlogs()
 
       showMessage(`a new blog ${blog.title} by ${blog.author} added`, 'info')
     } else {
@@ -99,12 +101,12 @@ const App = () => {
           : <div>
               <p>{user.username} is logged in</p>
               <button onClick={() => handleLogout()}>log out</button>
-              <Toglable label='new blog'>
+              <Toglable showLabel='new blog' hideLabel='cancel'>
                 <BlogForm createBlog={createBlog} />
               </Toglable>
               <BlogList 
-                blogs={blogs} 
-                username={user.username}
+                blogs={blogs}
+                updateBlogs={getBlogs}
               />
             </div>
       }
