@@ -1,4 +1,5 @@
 import Togglable from './Togglable'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, addLike, deleteBlog, userName }) => {
   return (
@@ -12,15 +13,22 @@ const Blog = ({ blog, addLike, deleteBlog, userName }) => {
           <p>likes: {blog.likes}</p>
           <button onClick={() => addLike(blog)}>like</button>
         </div>
-        
+
         <p>{blog.user.username}</p>
         {
           userName === blog.user.username &&
             <button onClick={() => deleteBlog(blog.id)}>delete</button>
         }
       </Togglable>
-    </div>  
+    </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  addLike: PropTypes.func.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
+  userName: PropTypes.string.isRequired
 }
 
 export default Blog

@@ -52,9 +52,9 @@ const App = () => {
     event.preventDefault()
 
     try {
-      const user = await loginService.login({ 
-        username, 
-        password 
+      const user = await loginService.login({
+        username,
+        password
       })
       blogService.setToken(user.token)
       window.localStorage.setItem(
@@ -93,11 +93,11 @@ const App = () => {
   }
 
   const addLike = async (blog) => {
-    const newBlog = {...blog, likes: blog.likes + 1}
+    const newBlog = { ...blog, likes: blog.likes + 1 }
 
     await blogService.update(newBlog)
     getBlogs()
-}
+  }
 
   return (
     <div>
@@ -109,30 +109,30 @@ const App = () => {
       {
         !user
           ? <LoginForm
-              login={username}
-              password={password}
-              handleUsername={({ target }) => handleUsername(target.value)}
-              handlePassword={({ target }) => handlePassword(target.value)}
-              handleSubmit={(event) => handleLogin(event)}
-            />
+            username={username}
+            password={password}
+            handleUsername={({ target }) => handleUsername(target.value)}
+            handlePassword={({ target }) => handlePassword(target.value)}
+            handleSubmit={(event) => handleLogin(event)}
+          />
           : <div>
-              <p>{user.username} is logged in</p>
-              <button onClick={() => handleLogout()}>log out</button>
-              <Togglable
-                showLabel='new blog' 
-                hideLabel='cancel'
-                ref={addBlogRef}
-              >
-                <BlogForm createBlog={createBlog} />
-              </Togglable>
-              <BlogList 
-                blogs={blogs}
-                userName={user.username}
-                updateBlogs={getBlogs}
-                addLike={blog => addLike(blog)}
-                deleteBlog={id => deleteBlog(id)}
-              />
-            </div>
+            <p>{user.username} is logged in</p>
+            <button onClick={() => handleLogout()}>log out</button>
+            <Togglable
+              showLabel='new blog'
+              hideLabel='cancel'
+              ref={addBlogRef}
+            >
+              <BlogForm createBlog={createBlog} />
+            </Togglable>
+            <BlogList
+              blogs={blogs}
+              userName={user.username}
+              updateBlogs={getBlogs}
+              addLike={blog => addLike(blog)}
+              deleteBlog={id => deleteBlog(id)}
+            />
+          </div>
       }
     </div>
   )
