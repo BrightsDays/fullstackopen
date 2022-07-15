@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "test": "NODE_ENV=test jest --verbose --runInBand --forceExit",
     "test_blog": "NODE_ENV=test jest -- tests/bloglist_api.test.js",
-    "test_user": "NODE_ENV=test jest -- tests/user_api.test.js"
+    "test_user": "NODE_ENV=test jest -- tests/user_api.test.js",
+    "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "license": "ISC",
   "devDependencies": {
