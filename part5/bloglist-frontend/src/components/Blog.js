@@ -10,7 +10,7 @@ const Blog = ({ blog, addLike, deleteBlog, userName }) => {
         <p>{blog.url}</p>
 
         <div className="button-box">
-          <p>likes: {blog.likes}</p>
+          <p className='blog__likes'>likes: {blog.likes}</p>
           <button
             className='button--like'
             onClick={() => addLike(blog)}>like</button>

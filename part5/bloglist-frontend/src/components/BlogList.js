@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const BlogList = ({ blogs, addLike, deleteBlog, userName }) => {
   return (
-    <div>
+    <div className='blog__list'>
       {
         blogs.length
           ? blogs
