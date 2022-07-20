@@ -11,7 +11,7 @@ const Statistic = ({ feedback }) => {
   })
 
   let all = 0
-  Object.values(feedback).forEach(item => {if (typeof item === Number) all += item})
+  Object.values(feedback).forEach(item => all += item)
   const average = (all / 3).toFixed(2)
   const positive = feedback.good ? (feedback.good / all * 100).toFixed(2) + ' %' : '0 %'
 

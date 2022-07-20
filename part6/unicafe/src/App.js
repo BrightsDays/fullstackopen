@@ -4,15 +4,9 @@ const App = ({ store }) => {
   return (
     <div>
       <h1>give feedback</h1>
-      <button
-        onClick={store.dispatch({ type: 'good' })}
-        >good</button>
-      <button
-        onClick={store.dispatch({ type: 'neutral' })}
-        >neutral</button>
-      <button
-        onClick={store.dispatch({ type: 'bad' })}
-        >bad</button>
+      <button onClick={() => store.dispatch({ type: 'GOOD' })}>good</button>
+      <button onClick={() => store.dispatch({ type: 'NEUTRAL' })}>neutral</button>
+      <button onClick={() => store.dispatch({ type: 'BAD' })}>bad</button>
       <Statistic feedback={store.getState()} />
     </div>
   )
