@@ -22,4 +22,6 @@ const feedbackReducer = (state = initialState, action) => {
   }
 }
 
+export const addFeedback = type => { return { type: type } }
+
 export default feedbackReducer
