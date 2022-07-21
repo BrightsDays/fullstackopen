@@ -36,13 +36,16 @@ const anecdotes = [
   }
 ]
 
-const voteReducer = (store = anecdotes, action) => {
+const anecdoteReducer = (store = anecdotes, action) => {
   const anecdotes = [...store]
 
   switch (action.type) {
     case 'ADD_VOTE':
       const id = action.data.id
       anecdotes.find(item => item.id === id).votes += 1
+      return anecdotes
+    case 'ADD_ANECDOTE':
+      anecdotes.push(action.data)
       return anecdotes
     default:
       return anecdotes
@@ -56,4 +59,15 @@ export const addVote = (id) => {
   }
 }
 
-export default voteReducer
+export const addAnecdote = (content) => {
+  return {
+    type: 'ADD_ANECDOTE',
+    data: {
+      id: Number((Math.random() * 1000000).toFixed(0)),
+      content,
+      votes: 0
+    }
+  }
+}
+
+export default anecdoteReducer

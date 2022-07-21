@@ -1,8 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useState } from 'react'
-import { addVote } from './reducers/voteReducer'
+import { addVote } from './reducers/anecdoteReducer'
 import Anecdote from './components/Anecdote'
 import PopularityList from './components/PopularityList'
+import AnecdoteForm from './components/AnecdoteForm'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -11,14 +12,14 @@ const App = () => {
   const [selectedId, setSelectedId] = useState(1)
   const randomAnecdote = anecdotes.find(item => item.id === selectedId)
   
-  const choseRandomAnecdote = () => {
+  const chooseRandomAnecdote = () => {
     let random = 1
 
     do {
       random = Math.floor(Math.random() * anecdotes.length)
     } while (random === selectedId || random === 0)
 
-    setSelectedId(random)
+    setSelectedId(anecdotes[random].id)
   }
 
   return (
@@ -32,8 +33,11 @@ const App = () => {
         onClick={() => dispatch(addVote(randomAnecdote.id))}
         >vote</button>
       <button
-        onClick={() => choseRandomAnecdote()}
+        onClick={() => chooseRandomAnecdote()}
         >next anecdote</button>
+        <hr />
+        <AnecdoteForm />
+        <hr />
       <PopularityList anecdotes={anecdotes} />
     </div>
   )
