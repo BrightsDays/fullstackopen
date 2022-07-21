@@ -4,13 +4,12 @@ import Anecdote from './Anecdote'
 const PopularityList = () => {
   const anecdotes = useSelector(state => state.anecdotes)
 
-  console.log(anecdotes[0])
   return (
     <div>
+      <h3>All anecdotes</h3>
       {anecdotes
         .slice()
         .sort((a, b) => {
-          console.log(a, b);
           return b.votes - a.votes})
         .map(item => {
           return (

@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useState } from 'react'
 import { addVote } from '../reducers/anecdoteReducer'
+import { setNotification } from '../reducers/notificationReducer'
 import Anecdote from './Anecdote'
 
 const RandomAnecdote = () => {
@@ -20,15 +21,20 @@ const RandomAnecdote = () => {
     setSelectedId(anecdotes[random].id)
   }
 
+  const voteForAnecdote = () => {
+    dispatch(addVote(randomAnecdote.id))
+    dispatch(setNotification(`You voted for ${randomAnecdote.content}`))
+  }
+
   return (
     <>
-      <h1>Anecdote of the day</h1>
+      <h3>Anecdote of the day</h3>
       <Anecdote
         content={randomAnecdote.content}
         points={randomAnecdote.votes}
       />
       <button
-        onClick={() => {dispatch(addVote(randomAnecdote.id))}}
+        onClick={() => voteForAnecdote()}
         >vote</button>
       <button
         onClick={() => chooseRandomAnecdote()}
