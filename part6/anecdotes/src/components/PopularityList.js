@@ -2,12 +2,16 @@ import { useSelector } from 'react-redux'
 import Anecdote from './Anecdote'
 
 const PopularityList = () => {
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(state => state.anecdotes)
 
+  console.log(anecdotes[0])
   return (
     <div>
       {anecdotes
-        .sort((a, b) => b.votes - a.votes)
+        .slice()
+        .sort((a, b) => {
+          console.log(a, b);
+          return b.votes - a.votes})
         .map(item => {
           return (
             <Anecdote

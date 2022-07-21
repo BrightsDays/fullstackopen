@@ -1,11 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { createStore } from 'redux'
+import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
-import voteReducer from './reducers/anecdoteReducer'
 import App from './App'
+import anecdoteReducer from './reducers/anecdoteReducer'
 
-const store = createStore(voteReducer)
+const store = configureStore({
+  reducer: {
+    anecdotes: anecdoteReducer
+  }
+})
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
