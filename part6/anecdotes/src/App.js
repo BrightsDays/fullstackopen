@@ -35,10 +35,10 @@ const App = () => {
       <button
         onClick={() => chooseRandomAnecdote()}
         >next anecdote</button>
-        <hr />
-        <AnecdoteForm />
-        <hr />
-      <PopularityList anecdotes={anecdotes} />
+      <hr />
+      <AnecdoteForm />
+      <hr />
+      <PopularityList />
     </div>
   )
 }

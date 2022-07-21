@@ -1,6 +1,9 @@
+import { useSelector } from 'react-redux'
 import Anecdote from './Anecdote'
 
-const PopularityList = ({ anecdotes }) => {
+const PopularityList = () => {
+  const anecdotes = useSelector(state => state)
+
   return (
     <div>
       {anecdotes
