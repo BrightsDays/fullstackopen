@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useState, useEffect } from 'react'
 import { addVote } from '../reducers/anecdoteReducer'
-import { setNotification } from '../reducers/notificationReducer'
+import { showNotification } from '../reducers/notificationReducer'
 import Anecdote from './Anecdote'
 
 const RandomAnecdote = () => {
@@ -21,8 +21,8 @@ const RandomAnecdote = () => {
   }
 
   const voteForAnecdote = () => {
-    dispatch(addVote(randomAnecdote.id))
-    dispatch(setNotification(`You voted for ${randomAnecdote.content}`))
+    dispatch(addVote(randomAnecdote.id, randomAnecdote))
+    dispatch(showNotification(`You voted for ${randomAnecdote.content}`, 5000))
   }
 
   if (randomAnecdote) return (

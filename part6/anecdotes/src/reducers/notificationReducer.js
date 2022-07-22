@@ -14,5 +14,12 @@ const notificationSlise = createSlice({
   }
 })
 
+export const showNotification = (content, time) => {
+  return async dispatch => {
+    dispatch(setNotification(content))
+    setTimeout(() => dispatch(setNotification('')), time)
+  }
+}
+
 export const { setNotification } = notificationSlise.actions
 export default notificationSlise.reducer
