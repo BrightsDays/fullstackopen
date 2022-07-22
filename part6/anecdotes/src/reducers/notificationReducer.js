@@ -21,7 +21,9 @@ export const showNotification = (content, time) => {
     dispatch(setNotification(content))
 
     if (notificationTimer) clearTimeout(notificationTimer)
-    notificationTimer = setTimeout(() => dispatch(setNotification('')), time)
+    notificationTimer = setTimeout(() => {
+      dispatch(setNotification(''))
+    }, time)
   }
 }
 
