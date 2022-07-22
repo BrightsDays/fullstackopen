@@ -4,6 +4,8 @@ const initialState = {
   content: null
 }
 
+let notificationTimer = null
+
 const notificationSlise = createSlice({
   name: 'notifications',
   initialState,
@@ -17,7 +19,9 @@ const notificationSlise = createSlice({
 export const showNotification = (content, time) => {
   return async dispatch => {
     dispatch(setNotification(content))
-    setTimeout(() => dispatch(setNotification('')), time)
+
+    if (notificationTimer) clearTimeout(notificationTimer)
+    notificationTimer = setTimeout(() => dispatch(setNotification('')), time)
   }
 }
 
