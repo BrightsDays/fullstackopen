@@ -16,11 +16,14 @@ const PopularityList = () => {
           return b.votes - a.votes})
         .map(item => {
           return (
-            <Anecdote
-              key={item.id}
-              content={item.content}
-              points={item.votes}
-            />
+            <div key={item.id}>
+              <hr />
+              <Anecdote
+                content={item.content}
+                points={item.votes}
+                anecdoteId={item.id}
+              />
+            </div>
           )
       })}
     </div>

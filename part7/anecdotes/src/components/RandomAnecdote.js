@@ -31,6 +31,7 @@ const RandomAnecdote = () => {
       <Anecdote
         content={randomAnecdote.content}
         points={randomAnecdote.votes}
+        anecdoteId={randomAnecdote.id}
       />
       <button
         onClick={() => voteForAnecdote()}

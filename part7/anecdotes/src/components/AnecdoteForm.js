@@ -2,9 +2,11 @@
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import { showNotification } from '../reducers/notificationReducer'
 import { connect } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const AnecdoteForm = (props) => {
   // const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const addAnecdote = async (event) => {
     event.preventDefault()
@@ -14,6 +16,7 @@ const AnecdoteForm = (props) => {
 
     props.createAnecdote(content)
     props.showNotification(`You added ${content}`, 5000)
+    navigate('/')
     // dispatch(createAnecdote(content))
     // dispatch(showNotification(`You added ${content}`, 5000))
   }
