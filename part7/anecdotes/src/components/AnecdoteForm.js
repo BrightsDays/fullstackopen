@@ -1,45 +1,37 @@
-// import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import { showNotification } from '../reducers/notificationReducer'
-import { connect } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { useField } from '../hooks'
 
-const AnecdoteForm = (props) => {
-  // const dispatch = useDispatch()
+const AnecdoteForm = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { reset: resetAnecdote, ...anecdote } = useField('text')
 
   const addAnecdote = async (event) => {
     event.preventDefault()
     
-    const content = event.target.anecdote.value
-    event.target.anecdote.value = ''
+    const content = anecdote.value
+    resetAnecdote()
 
-    props.createAnecdote(content)
-    props.showNotification(`You added ${content}`, 5000)
     navigate('/')
-    // dispatch(createAnecdote(content))
-    // dispatch(showNotification(`You added ${content}`, 5000))
+    dispatch(createAnecdote(content))
+    dispatch(showNotification(`You added ${content}`, 5000))
   }
 
   return (
     <form onSubmit={addAnecdote}>
       <h3>Add anecdote</h3>
-      <input name='anecdote' />
-      <button type='submit'>add anecdote</button>
+      <input {...anecdote} />
+      <div>
+        <button type='submit'>add anecdote</button>
+        <button
+          onClick={(event) => resetAnecdote(event)}
+          >clear</button>
+      </div>
     </form>
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    anecdotes: state.anecdotes
-  }
-}
-const mapDispatchToProps = {
-  createAnecdote,
-  showNotification
-}
-
-const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(AnecdoteForm)
-export default ConnectedForm
-// export default AnecdoteForm
+export default AnecdoteForm
