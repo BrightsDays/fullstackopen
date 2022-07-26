@@ -6,16 +6,17 @@ import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import './index.css'
+import Notification from './components/Notification'
+import { useDispatch } from 'react-redux'
+import { showNotification } from './reducers/notificationReducer'
 
 const App = () => {
+  const dispatch = useDispatch()
+
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [message, setMessage] = useState({
-    content: '',
-    type: '',
-  })
 
   const getBlogs = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -37,19 +38,6 @@ const App = () => {
   const handleUsername = (value) => setUsername(value)
   const handlePassword = (value) => setPassword(value)
 
-  const showMessage = (content, type) => {
-    setMessage({ content, type })
-
-    setTimeout(
-      () =>
-        setMessage({
-          content: '',
-          type: '',
-        }),
-      5000
-    )
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -64,7 +52,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      showMessage('Wrong username or password', 'error')
+      dispatch(showNotification('Wrong username or password', 'error'))
     }
   }
 
@@ -79,9 +67,14 @@ const App = () => {
       await blogService.create(blog)
       getBlogs()
 
-      showMessage(`a new blog ${blog.title} by ${blog.author} added`, 'info')
+      dispatch(
+        showNotification(
+          `a new blog ${blog.title} by ${blog.author} added`,
+          'info'
+        )
+      )
     } else {
-      showMessage('fill in all fields', 'error')
+      dispatch(showNotification('fill in all fields', 'error'))
     }
   }
 
@@ -102,9 +95,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {message.content && (
-        <p className={`${message.type} message`}>{message.content}</p>
-      )}
+      <Notification />
       {!user ? (
         <LoginForm
           username={username}
