@@ -1,10 +1,9 @@
 import Blog from './Blog'
-import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { initBlogs } from '../reducers/blogReducer'
 
-const BlogList = ({ userName }) => {
+const BlogList = () => {
   const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs)
 
@@ -23,17 +22,12 @@ const BlogList = ({ userName }) => {
               <Blog
                 key={blog.id}
                 blog={blog}
-                userName={userName}
               />
             )
           })
         : 'nothing'}
     </div>
   )
-}
-
-BlogList.propTypes = {
-  userName: PropTypes.string.isRequired,
 }
 
 export default BlogList

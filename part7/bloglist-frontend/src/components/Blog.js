@@ -1,10 +1,11 @@
 import Togglable from './Togglable'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, addLike } from '../reducers/blogReducer'
 
-const Blog = ({ blog, userName }) => {
+const Blog = ({ blog }) => {
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.user)
 
   return (
     <div className="blog__item">
@@ -22,7 +23,7 @@ const Blog = ({ blog, userName }) => {
 
         <p>{blog.user.username}</p>
         {
-          userName === blog.user.username &&
+          user.username === blog.user.username &&
             <button onClick={() => dispatch(deleteBlog(blog.id))}>delete</button>
         }
       </Togglable>
@@ -31,8 +32,7 @@ const Blog = ({ blog, userName }) => {
 }
 
 Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  userName: PropTypes.string.isRequired
+  blog: PropTypes.object.isRequired
 }
 
 export default Blog
