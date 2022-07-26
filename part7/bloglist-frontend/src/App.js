@@ -9,20 +9,18 @@ import './index.css'
 import Notification from './components/Notification'
 import { useDispatch } from 'react-redux'
 import { showNotification } from './reducers/notificationReducer'
+import { initBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
 
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const getBlogs = () => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }
-
-  useEffect(() => getBlogs(), [])
+  useEffect(() => {
+    dispatch(initBlogs())
+  }, [dispatch])
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')
 
@@ -61,37 +59,6 @@ const App = () => {
     window.localStorage.removeItem('loggedUser')
   }
 
-  const createBlog = async (blog) => {
-    if (blog.title && blog.author && blog.url) {
-      addBlogRef.current()
-      await blogService.create(blog)
-      getBlogs()
-
-      dispatch(
-        showNotification(
-          `a new blog ${blog.title} by ${blog.author} added`,
-          'info'
-        )
-      )
-    } else {
-      dispatch(showNotification('fill in all fields', 'error'))
-    }
-  }
-
-  const deleteBlog = async (id) => {
-    if (window.confirm('Delete blog?')) {
-      await blogService.deleteBlog(id)
-      getBlogs()
-    }
-  }
-
-  const addLike = async (blog) => {
-    const newBlog = { ...blog, likes: blog.likes + 1 }
-
-    await blogService.update(newBlog)
-    getBlogs()
-  }
-
   return (
     <div>
       <h2>blogs</h2>
@@ -109,15 +76,9 @@ const App = () => {
           <p>{user.username} is logged in</p>
           <button onClick={() => handleLogout()}>log out</button>
           <Togglable showLabel="new blog" hideLabel="cancel" ref={addBlogRef}>
-            <BlogForm createBlog={createBlog} />
+            <BlogForm />
           </Togglable>
-          <BlogList
-            blogs={blogs}
-            userName={user.username}
-            updateBlogs={getBlogs}
-            addLike={(blog) => addLike(blog)}
-            deleteBlog={(id) => deleteBlog(id)}
-          />
+          <BlogList userName={user.username} />
         </div>
       )}
     </div>

@@ -1,42 +1,45 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
+import { createBlog } from '../reducers/blogReducer'
+import { showNotification } from '../reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
-const BlogForm = ({ createBlog }) => {
-  const [blog, setBlog] = useState({
-    title: '',
-    author: '',
-    url: ''
-  })
-
-  const handleChange = (value, type) => {
-    setBlog({ ...blog, [type]: value })
-  }
+const BlogForm = () => {
+  const dispatch = useDispatch()
 
   const addBlog = async (event) => {
     event.preventDefault()
 
-    createBlog({
-      title: blog.title,
-      author: blog.author,
-      url: blog.url
-    })
+    if (event.target.title.value &&
+        event.target.author.value &&
+        event.target.url.value) {
+      dispatch(createBlog({
+        title: event.target.title.value,
+        author: event.target.author.value,
+        url: event.target.url.value
+      }))
 
-    setBlog(({
-      title: '',
-      author: '',
-      url: ''
-    }))
+      dispatch(
+        showNotification(
+          `a new blog ${event.target.title.value} by ${event.target.author.value} added`,
+          'info'
+        )
+      )
+
+      event.target.title.value = ''
+      event.target.author.value = ''
+      event.target.url.value = ''
+    } else {
+      dispatch(showNotification('fill in all fields', 'error'))
+    }
   }
 
-  const inputsList = Object.keys(blog).map(input => {
+  const inputsList = ['title', 'author', 'url'].map(input => {
     return (
       <div key={input}>
         <label htmlFor={input}>{input}:</label>
         <input
           type='text'
           id={input}
-          value={blog[input]}
-          onChange={({ target }) => handleChange(target.value, input)}
+          name={input}
         />
       </div>
     )
@@ -49,10 +52,6 @@ const BlogForm = ({ createBlog }) => {
       <button>create</button>
     </form>
   )
-}
-
-BlogForm.propTypes = {
-  createBlog: PropTypes.func.isRequired
 }
 
 export default BlogForm
