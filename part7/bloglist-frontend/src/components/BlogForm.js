@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 const BlogForm = () => {
   const dispatch = useDispatch()
 
-  const addBlog = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     if (event.target.title.value &&
@@ -46,7 +46,7 @@ const BlogForm = () => {
   })
 
   return (
-    <form onSubmit={addBlog}>
+    <form onSubmit={handleSubmit}>
       <h2>Create new</h2>
       {inputsList}
       <button>create</button>
