@@ -6,8 +6,9 @@ import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import { useDispatch, useSelector } from 'react-redux'
-import { login, logout } from './reducers/userReducer'
+import { login, logout } from './reducers/loginReducer'
 import './index.css'
+import UserList from './components/UserList'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -40,6 +41,7 @@ const App = () => {
             <BlogList userName={user.username} />
           </div>
         )}
+      <UserList />
     </div>
   )
 }
