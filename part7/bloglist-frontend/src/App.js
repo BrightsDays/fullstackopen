@@ -9,11 +9,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { login, logout } from './reducers/loginReducer'
 import './index.css'
 import UserList from './components/UserList'
+import { Routes, Route, Link } from 'react-router-dom'
 
 const App = () => {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.login)
   const addBlogRef = useRef()
+  const padding = { padding: 5 }
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')
@@ -25,25 +27,40 @@ const App = () => {
     }
   }, [])
 
-  return (
-    <div>
-      <h2>blogs</h2>
-      <Notification />
-      {!user
-        ? <LoginForm />
-        : (
-          <div>
-            <p>{user.username} is logged in</p>
-            <button onClick={() => dispatch(logout())}>log out</button>
-            <Togglable showLabel="new blog" hideLabel="cancel" ref={addBlogRef}>
-              <BlogForm />
-            </Togglable>
-            <BlogList userName={user.username} />
-          </div>
-        )}
-      <UserList />
-    </div>
-  )
+  return !user
+    ? (
+      <div>
+        <h2>blogs</h2>
+        <Notification />
+        <LoginForm />
+      </div>
+    )
+    : (
+      <div>
+        <h2>blogs</h2>
+        <Notification />
+
+        <p>{user.username} is logged in</p>
+        <button onClick={() => dispatch(logout())}>log out</button>
+
+        <nav>
+          <Link style={padding} to='/'>blogs</Link>
+          <Link style={padding} to='/users'>users</Link>
+        </nav>
+
+        <Routes>
+          <Route path='/' element={
+            <div>
+              <Togglable showLabel="new blog" hideLabel="cancel" ref={addBlogRef}>
+                <BlogForm />
+              </Togglable>
+              <BlogList userName={user.username} />
+            </div>
+          } />
+          <Route path='/users' element={<UserList />} />
+        </Routes>
+      </div>
+    )
 }
 
 export default App

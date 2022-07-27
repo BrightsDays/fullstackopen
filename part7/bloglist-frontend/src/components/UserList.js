@@ -20,16 +20,15 @@ const UserList = () => {
   })
 
   return (
-    <>
-      <h3>Users</h3>
-      <table>
+    <table>
+      <tbody>
         <tr>
           <th>users</th>
           <th>blogs created</th>
         </tr>
         {list}
-      </table>
-    </>
+      </tbody>
+    </table>
   )
 }
 

@@ -2,10 +2,16 @@ import Togglable from './Togglable'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, addLike } from '../reducers/blogReducer'
+import { showNotification } from '../reducers/notificationReducer'
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.login)
+
+  const clickHandler = () => {
+    dispatch(deleteBlog(blog.id))
+    dispatch(showNotification(`${blog.title} deleted`, 'info'))
+  }
 
   return (
     <div className="blog__item">
@@ -24,7 +30,7 @@ const Blog = ({ blog }) => {
         <p>{blog.user.username}</p>
         {
           user.username === blog.user.username &&
-            <button onClick={() => dispatch(deleteBlog(blog.id))}>delete</button>
+            <button onClick={() => clickHandler()}>delete</button>
         }
       </Togglable>
     </div>
