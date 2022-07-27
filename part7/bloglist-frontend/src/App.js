@@ -10,8 +10,8 @@ import { login, logout } from './reducers/loginReducer'
 import './index.css'
 import UserList from './components/UserList'
 import { Routes, Route, Link } from 'react-router-dom'
-import UserPage from './components/UserPage'
-import BlogPage from './components/BlogPage'
+import UserPage from './components/User'
+import BlogPage from './components/Blog'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -29,46 +29,40 @@ const App = () => {
     }
   }, [])
 
-  return !user
-    ? (
-      <div>
-        <h2>blogs</h2>
-        <Notification />
+  return (<div>
+    <h2>blogs</h2>
+    <Notification />
+
+    {!user
+      ? (
         <LoginForm />
-      </div>
-    )
-    : (
-      <div>
-        <h2>blogs</h2>
-        <Notification />
+      )
+      : (
+        <div>
+          <nav>
+            <Link style={padding} to='/blogs'>blogs</Link>
+            <Link style={padding} to='/users'>users</Link>
+            <span style={padding}>{user.username} is logged in</span>
+            <button style={padding} onClick={() => dispatch(logout())}>log out</button>
+          </nav>
 
-        <p>{user.username} is logged in</p>
-        <button onClick={() => dispatch(logout())}>log out</button>
-
-        <nav>
-          <Link style={padding} to='/blogs'>blogs</Link>
-          <Link style={padding} to='/users'>users</Link>
-        </nav>
-
-        <Routes>
-          <Route path='/' element='Blog app' />
-          <Route path='/blogs' element={
-            <div>
-              <Togglable showLabel="new blog" hideLabel="cancel" ref={addBlogRef}>
-                <BlogForm />
-              </Togglable>
-              <BlogList userName={user.username} />
-            </div>
-          } />
-          <Route path='/blogs/:id' element={<BlogPage />} />
-          <Route path='/users' element={<UserList />} />
-          <Route
-            path='/users/:id'
-            element={<UserPage />}
-          />
-        </Routes>
-      </div>
-    )
+          <Routes>
+            <Route path='/' element='Blog app' />
+            <Route path='/blogs' element={
+              <div>
+                <Togglable showLabel="new blog" hideLabel="cancel" ref={addBlogRef}>
+                  <BlogForm />
+                </Togglable>
+                <BlogList userName={user.username} />
+              </div>
+            } />
+            <Route path='/blogs/:id' element={<BlogPage />} />
+            <Route path='/users' element={<UserList />} />
+            <Route path='/users/:id' element={<UserPage />} />
+          </Routes>
+        </div>
+      )}
+  </div>)
 }
 
 export default App
