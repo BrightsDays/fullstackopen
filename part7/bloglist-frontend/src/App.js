@@ -10,6 +10,8 @@ import { login, logout } from './reducers/loginReducer'
 import './index.css'
 import UserList from './components/UserList'
 import { Routes, Route, Link } from 'react-router-dom'
+import UserPage from './components/UserPage'
+import BlogPage from './components/BlogPage'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -44,12 +46,13 @@ const App = () => {
         <button onClick={() => dispatch(logout())}>log out</button>
 
         <nav>
-          <Link style={padding} to='/'>blogs</Link>
+          <Link style={padding} to='/blogs'>blogs</Link>
           <Link style={padding} to='/users'>users</Link>
         </nav>
 
         <Routes>
-          <Route path='/' element={
+          <Route path='/' element='Blog app' />
+          <Route path='/blogs' element={
             <div>
               <Togglable showLabel="new blog" hideLabel="cancel" ref={addBlogRef}>
                 <BlogForm />
@@ -57,7 +60,12 @@ const App = () => {
               <BlogList userName={user.username} />
             </div>
           } />
+          <Route path='/blogs/:id' element={<BlogPage />} />
           <Route path='/users' element={<UserList />} />
+          <Route
+            path='/users/:id'
+            element={<UserPage />}
+          />
         </Routes>
       </div>
     )
