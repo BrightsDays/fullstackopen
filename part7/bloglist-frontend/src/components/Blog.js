@@ -5,6 +5,41 @@ import { initBlogs } from '../reducers/blogReducer'
 import { deleteBlog, addLike } from '../reducers/blogReducer'
 import { showNotification } from '../reducers/notificationReducer'
 import CommentForm from './CommentForm'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  margin: 5px 0;
+  padding: 5px;
+`
+const Flex = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 5px;
+  align-items: baseline;
+`
+const Title = styled.h3`
+  font-size: 20px;
+  margin: 5px 0;
+`
+const Paragraph = styled.p`
+  margin: 0 0 5px 0;
+`
+const Button = styled.button`
+  width: fit-content;
+  display: block;
+  padding: 5px 30px;
+  font-size: 16px;
+  background-color: lightgrey;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: white;
+  }
+`
 
 const BlogPage = () => {
   const dispatch = useDispatch()
@@ -32,25 +67,25 @@ const BlogPage = () => {
     : null
 
   if (blog) return (
-    <div className="blog__item">
-      <p>{blog.title} - {blog.author}</p>
-      <p>{blog.url}</p>
+    <Container>
+      <Title>{blog.title} - {blog.author}</Title>
+      <Paragraph><b>URL:</b> {blog.url}</Paragraph>
 
-      <div className="button-box">
-        <p className='blog__likes'>likes: {blog.likes}</p>
-        <button
+      <Flex>
+        <Paragraph><b>likes:</b> {blog.likes}</Paragraph>
+        <Button
           className='button--like'
-          onClick={() => dispatch(addLike(blog))}>like</button>
-      </div>
+          onClick={() => dispatch(addLike(blog))}>like</Button>
+      </Flex>
 
-      <p>Added by {blog.user.username}</p>
+      <Paragraph>Added by {blog.user.username}</Paragraph>
       {user.username === blog.user.username &&
-        <button onClick={() => clickHandler()}>delete</button>}
+        <Button onClick={() => clickHandler()}>delete</Button>}
 
-      <h3>Comments</h3>
-      <CommentForm blog={blog} />
+      <Title>Comments</Title>
       {comments}
-    </div>
+      <CommentForm blog={blog} />
+    </Container>
   )
 }
 

@@ -2,6 +2,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { initBlogs } from '../reducers/blogReducer'
 import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  padding: 10px 0;
+`
+const NavLink = styled(Link)`
+  line-height: 25px;
+  padding: 5px;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`
 
 const BlogList = () => {
   const dispatch = useDispatch()
@@ -12,7 +25,7 @@ const BlogList = () => {
   }, [dispatch])
 
   return (
-    <div className='blog__list'>
+    <Container>
       {(blogs && blogs.length)
         ? blogs
           .slice()
@@ -20,12 +33,12 @@ const BlogList = () => {
           .map((blog) => {
             return (
               <li key={blog.id}>
-                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                <NavLink to={`/blogs/${blog.id}`}>{blog.title}</NavLink>
               </li>
             )
           })
         : 'nothing'}
-    </div>
+    </Container>
   )
 }
 

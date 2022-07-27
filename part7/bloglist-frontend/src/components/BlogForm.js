@@ -1,6 +1,34 @@
 import { createBlog } from '../reducers/blogReducer'
 import { showNotification } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
+import styled from 'styled-components'
+
+const Title = styled.h3`
+  font-size: 20px;
+  margin: 5px 0;
+`
+const Form = styled.form`
+  width: 300px;
+  padding-bottom: 10px;
+`
+const Input = styled.input`
+  width: 100%;
+  margin: 5px 0 10px 0;
+  box-sizing: border-box;
+`
+const Button = styled.button`
+  display: block;
+  padding: 5px 30px;
+  margin: 0 auto;
+  font-size: 16px;
+  background-color: lightgrey;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: white;
+  }
+`
 
 const BlogForm = () => {
   const dispatch = useDispatch()
@@ -36,7 +64,7 @@ const BlogForm = () => {
     return (
       <div key={input}>
         <label htmlFor={input}>{input}:</label>
-        <input
+        <Input
           type='text'
           id={input}
           name={input}
@@ -46,11 +74,11 @@ const BlogForm = () => {
   })
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Create new</h2>
+    <Form onSubmit={handleSubmit}>
+      <Title>Create new</Title>
       {inputsList}
-      <button>create</button>
-    </form>
+      <Button>create</Button>
+    </Form>
   )
 }
 

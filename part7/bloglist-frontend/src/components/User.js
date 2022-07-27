@@ -2,6 +2,24 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { initUsers } from '../reducers/userReducer'
 import { useMatch } from 'react-router-dom'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  width: 800px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+`
+const Title = styled.h3`
+  font-size: 20px;
+  margin: 5px 0;
+`
+const Header = styled.h4`
+  margin: 5px 0;
+`
+const List = styled.ul`
+  padding-left: 12px;
+`
 
 const UserPage = () => {
   const dispatch = useDispatch()
@@ -17,13 +35,15 @@ const UserPage = () => {
     : null
 
   if (user) return (
-    <div>
-      <h3>{user.username}</h3>
-      <h4>Added blogs:</h4>
-      <ul>
-        {user.blogs.map(blog => <li key={blog.id}>{blog.title}</li>)}
-      </ul>
-    </div>
+    <Container>
+      <Title>{user.username}</Title>
+      <Header>Added blogs:</Header>
+      <List>
+        {user.blogs.length
+          ? user.blogs.map(blog => <li key={blog.id}>{blog.title}</li>)
+          : <p>none</p>}
+      </List>
+    </Container>
   )
 }
 
