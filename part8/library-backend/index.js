@@ -109,7 +109,7 @@ const typeDefs = gql`
       published: String!
       genres: [String]
     ): Book
-    editAuthor(name: String!, born: Int!): Author
+    editAuthor(name: String!, born: String!): Author
   }
 `
 
