@@ -1,5 +1,12 @@
-const Authors = ({ authors }) => {
-  const list = authors.map((author, index) => (
+import { useQuery } from '@apollo/client'
+import { ALL_AUTHORS } from '../queries'
+
+const Authors = () => {
+  const result = useQuery(ALL_AUTHORS)
+
+  if (result.loading) return <div>loading...</div>
+
+  const list = result.data.allAuthors.map((author, index) => (
     <tr key={`auth_${index}`}>
       <td>{author.name}</td>
       <td>{author.born}</td>
