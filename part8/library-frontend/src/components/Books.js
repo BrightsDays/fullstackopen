@@ -5,7 +5,6 @@ const Books = () => {
   const result = useQuery(ALL_BOOKS)
 
   if (result.loading) return <div>loading...</div>
-  console.log(result)
 
   const list = result.data.allBooks.map((book, index) => (
     <tr key={`auth_${index}`}>
