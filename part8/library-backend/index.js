@@ -4,7 +4,6 @@ const {
   gql,
   AuthenticationError,
 } = require('apollo-server')
-const { v1: uuid } = require('uuid')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const Book = require('./models/book')
@@ -72,15 +71,37 @@ const resolvers = {
       if (!args.author && !args.genre) {
         return Book.find({})
       }
+
+      if (!args.genre && args.author) {
+        return Book.find({ author: args.author })
+      }
+      if (!args.author && args.genre) {
+        return Book.find({ genres: { $in: [args.genre] } })
+      }
+
+      return Book.find({ author: args.author, genres: { $in: [args.genre] } })
     },
     allAuthors: async () => Author.find({}),
   },
   Mutation: {
     addBook: async (root, args) => {
       const book = new Book({ ...args })
+      const author = await Author.find({ name: args.author })
+
+      console.log(author)
+
+      if (!author.length) {
+        const author = new Author({ name: args.author })
+
+        try {
+          await author.save()
+        } catch (error) {
+          throw new UserInputError(error.message, { invalidArgs: args })
+        }
+      }
 
       try {
-        book.save()
+        await book.save()
       } catch (error) {
         throw new UserInputError(error.message, { invalidArgs: args })
       }
