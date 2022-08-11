@@ -41,8 +41,8 @@ const resolvers = {
     },
     allAuthors: async () => Author.find({}),
     allGenres: async () => Genre.find({}),
-    me: async (root, args, context) => {
-      return context.currentUser
+    me: async (root, args, { currentUser }) => {
+      return currentUser[0]
     },
   },
   Mutation: {
@@ -103,7 +103,21 @@ const resolvers = {
       return author
     },
     createUser: async (root, args) => {
-      const user = new User({ username: args.username })
+      const user = new User({
+        username: args.username,
+        favouriteGenre: args.favouriteGenre,
+      })
+      const favouriteGenre = await Genre.find({ name: args.favouriteGenre })
+
+      if (!favouriteGenre.length) {
+        const genre = new Genre({ name: args.favouriteGenre })
+
+        try {
+          await genre.save()
+        } catch (error) {
+          throw new UserInputError(error.message, { invalidArgs: args })
+        }
+      }
 
       return user.save().catch((error) => {
         throw new UserInputError(error.message, {

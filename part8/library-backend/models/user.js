@@ -5,6 +5,12 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
     minLength: 3,
+    unique: true,
+  },
+  favouriteGenre: {
+    type: mongoose.Schema.Types.ObjectId,
+    type: String,
+    ref: 'Genre',
   },
 })
 

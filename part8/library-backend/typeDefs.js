@@ -24,6 +24,7 @@ const typeDefs = gql`
 
   type User {
     username: String!
+    favouriteGenre: String!
     id: ID!
   }
 
@@ -48,7 +49,7 @@ const typeDefs = gql`
       genres: [String]
     ): Book
     editAuthor(name: String!, born: String!): Author
-    createUser(username: String!): User
+    createUser(username: String!, favouriteGenre: String!): User
     login(username: String!, password: String!): Token
   }
 `

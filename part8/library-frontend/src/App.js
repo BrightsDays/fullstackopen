@@ -6,6 +6,7 @@ import BookForm from './components/BookForm'
 import LoginForm from './components/LoginForm'
 import { useState } from 'react'
 import { useApolloClient } from '@apollo/client'
+import Recommend from './components/Recommend'
 
 const LinkButton = styled(Link)`
   padding: 5px;
@@ -47,6 +48,7 @@ const App = () => {
       <nav>
         <LinkButton to="/authors">Authors</LinkButton>
         <LinkButton to="/books">Books</LinkButton>
+        {token && <LinkButton to="/recommend">Recommend</LinkButton>}
         {token && <LinkButton to="/add-book">Add Book</LinkButton>}
         {token && (
           <LinkButton to="/login" onClick={logout}>
@@ -62,6 +64,7 @@ const App = () => {
         <Route path="/" element={<Books />} />
         <Route path="/authors" element={<Authors token={token} />} />
         <Route path="/books" element={<Books />} />
+        <Route path="/recommend" element={<Recommend />} />
         <Route path="/add-book" element={<BookForm />} />
         <Route
           path="/login"
@@ -69,7 +72,7 @@ const App = () => {
             !token ? (
               <LoginForm setToken={setToken} setError={notify} />
             ) : (
-              <Navigate replace to="/" />
+              <Navigate replace to="/recommend" />
             )
           }
         />
