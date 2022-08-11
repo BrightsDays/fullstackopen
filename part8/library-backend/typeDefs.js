@@ -8,6 +8,12 @@ const typeDefs = gql`
     id: ID!
   }
 
+  type Genre {
+    name: String!
+    bookCount: Int!
+    id: ID!
+  }
+
   type Book {
     title: String!
     published: String!
@@ -30,6 +36,7 @@ const typeDefs = gql`
     authorCount: Int!
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
+    allGenres: [Genre!]!
     me: User
   }
 

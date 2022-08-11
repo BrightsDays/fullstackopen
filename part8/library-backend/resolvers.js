@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const User = require('./models/user')
+const Genre = require('./models/genre')
 
 const JWT_SECRET = 'secret_key'
 
@@ -11,6 +12,13 @@ const resolvers = {
   Author: {
     bookCount: async (root) => {
       const books = await Book.find({ author: root.name })
+      return books.length
+    },
+  },
+  Genre: {
+    bookCount: async (root) => {
+      const books = await Book.find({ genres: { $in: [root.name] } })
+      console.log(root.name)
       return books.length
     },
   },
@@ -32,6 +40,7 @@ const resolvers = {
       return Book.find({ author: args.author, genres: { $in: [args.genre] } })
     },
     allAuthors: async () => Author.find({}),
+    allGenres: async () => Genre.find({}),
     me: async (root, args, context) => {
       return context.currentUser
     },
@@ -44,6 +53,20 @@ const resolvers = {
 
       const book = new Book({ ...args })
       const author = await Author.find({ name: args.author })
+
+      args.genres.forEach(async (item) => {
+        const genre = await Genre.find({ name: item })
+
+        if (!genre.length) {
+          const genre = new Genre({ name: item })
+
+          try {
+            await genre.save()
+          } catch (error) {
+            throw new UserInputError(error.message, { invalidArgs: args })
+          }
+        }
+      })
 
       if (!author.length) {
         const author = new Author({ name: args.author })

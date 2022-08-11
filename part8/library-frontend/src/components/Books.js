@@ -1,12 +1,34 @@
 import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../queries'
+import { ALL_BOOKS, ALL_GENRES } from '../queries'
+import styled from 'styled-components'
+import { useState } from 'react'
+
+const NavItem = styled.button`
+  padding: 5px;
+  text-decoration: none;
+  color: black;
+  background-color: lightgrey;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    background-color: grey;
+  }
+`
 
 const Books = () => {
-  const result = useQuery(ALL_BOOKS)
+  const [genre, setGenre] = useState('')
+  const genres = useQuery(ALL_GENRES)
+  const books = useQuery(ALL_BOOKS, { variables: { genre } })
 
-  if (result.loading) return <div>loading...</div>
+  if (books.loading || genres.loading) return <div>loading...</div>
 
-  const list = result.data.allBooks.map((book, index) => (
+  const genreList = genres.data.allGenres.map((genre, index) => (
+    <NavItem key={`gnr_${index}`} onClick={() => setGenre(genre.name)}>
+      {genre.name}
+    </NavItem>
+  ))
+
+  const bookList = books.data.allBooks.map((book, index) => (
     <tr key={`auth_${index}`}>
       <td>{book.title}</td>
       <td>{book.author}</td>
@@ -17,6 +39,12 @@ const Books = () => {
   return (
     <div>
       <h3>Books</h3>
+      {genres.data.allGenres.length && (
+        <nav>
+          {genreList}
+          <NavItem onClick={() => setGenre('')}>All</NavItem>
+        </nav>
+      )}
       <table>
         <tbody>
           <tr>
@@ -24,7 +52,7 @@ const Books = () => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {list}
+          {bookList}
         </tbody>
       </table>
     </div>
