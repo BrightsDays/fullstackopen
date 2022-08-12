@@ -1,5 +1,7 @@
 const { UserInputError, AuthenticationError } = require('apollo-server')
 const jwt = require('jsonwebtoken')
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
 
 const Book = require('./models/book')
 const Author = require('./models/author')
@@ -54,19 +56,20 @@ const resolvers = {
       const book = new Book({ ...args })
       const author = await Author.find({ name: args.author })
 
-      args.genres.forEach(async (item) => {
-        const genre = await Genre.find({ name: item })
+      if (args.genres)
+        args.genres.forEach(async (item) => {
+          const genre = await Genre.find({ name: item })
 
-        if (!genre.length) {
-          const genre = new Genre({ name: item })
+          if (!genre.length) {
+            const genre = new Genre({ name: item })
 
-          try {
-            await genre.save()
-          } catch (error) {
-            throw new UserInputError(error.message, { invalidArgs: args })
+            try {
+              await genre.save()
+            } catch (error) {
+              throw new UserInputError(error.message, { invalidArgs: args })
+            }
           }
-        }
-      })
+        })
 
       if (!author.length) {
         const author = new Author({ name: args.author })
@@ -83,6 +86,8 @@ const resolvers = {
       } catch (error) {
         throw new UserInputError(error.message, { invalidArgs: args })
       }
+
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
 
       return book
     },
@@ -138,6 +143,11 @@ const resolvers = {
       }
 
       return { value: jwt.sign(userForToken, JWT_SECRET) }
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED']),
     },
   },
 }

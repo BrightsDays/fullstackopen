@@ -5,8 +5,9 @@ import styled from 'styled-components'
 import BookForm from './components/BookForm'
 import LoginForm from './components/LoginForm'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useSubscription } from '@apollo/client'
 import Recommend from './components/Recommend'
+import { BOOK_ADDED } from './queries'
 
 const LinkButton = styled(Link)`
   padding: 5px;
@@ -22,6 +23,13 @@ const App = () => {
   const [token, setToken] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const client = useApolloClient()
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded
+      notify(`${addedBook.title} added`)
+    },
+  })
 
   const logout = () => {
     setToken('')
@@ -65,7 +73,7 @@ const App = () => {
         <Route path="/authors" element={<Authors token={token} />} />
         <Route path="/books" element={<Books />} />
         <Route path="/recommend" element={<Recommend />} />
-        <Route path="/add-book" element={<BookForm />} />
+        <Route path="/add-book" element={<BookForm setError={notify} />} />
         <Route
           path="/login"
           element={

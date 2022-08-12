@@ -52,6 +52,19 @@ const typeDefs = gql`
     createUser(username: String!, favouriteGenre: String!): User
     login(username: String!, password: String!): Token
   }
+
+  fragment BookDetails on Book {
+    name
+    phone
+    address {
+      street
+      city
+    }
+  }
+
+  type Subscription {
+    bookAdded: Book!
+  }
 `
 
-module.exports = { typeDefs }
+module.exports = typeDefs
