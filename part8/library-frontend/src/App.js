@@ -7,7 +7,7 @@ import LoginForm from './components/LoginForm'
 import { useState } from 'react'
 import { useApolloClient, useSubscription } from '@apollo/client'
 import Recommend from './components/Recommend'
-import { BOOK_ADDED } from './queries'
+import { ALL_BOOKS, BOOK_ADDED } from './queries'
 
 const LinkButton = styled(Link)`
   padding: 5px;
@@ -24,10 +24,28 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const client = useApolloClient()
 
+  const updateCache = (addedBook) => {
+    const booksQuery = {
+      query: ALL_BOOKS,
+      variables: { genre: '' },
+    }
+
+    const { allBooks } = client.readQuery(booksQuery)
+
+    if (!allBooks.filter((book) => book.id === addedBook.id).length) {
+      client.cache.updateQuery(booksQuery, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(addedBook),
+        }
+      })
+    }
+  }
+
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
       const addedBook = subscriptionData.data.bookAdded
       notify(`${addedBook.title} added`)
+      updateCache(addedBook)
     },
   })
 

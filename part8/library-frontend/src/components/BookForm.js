@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { CREATE_BOOK, ALL_AUTHORS, ALL_BOOKS, ALL_GENRES } from '../queries'
+import { CREATE_BOOK } from '../queries'
 
 const BookForm = ({ setError }) => {
   const [title, setTitle] = useState('')
@@ -11,11 +11,6 @@ const BookForm = ({ setError }) => {
 
   const [createBook] = useMutation(CREATE_BOOK, {
     onError: (error) => setError(error.graphQLErrors[0].message),
-    refetchQueries: [
-      { query: ALL_BOOKS },
-      { query: ALL_AUTHORS },
-      { query: ALL_GENRES },
-    ],
   })
 
   const handleSubmit = (event) => {
@@ -32,9 +27,11 @@ const BookForm = ({ setError }) => {
   const addGenre = (event) => {
     event.preventDefault()
 
-    const updatedGenres = genres.concat(genre)
-    setGenres(updatedGenres)
-    setGenre('')
+    if (genre) {
+      const updatedGenres = genres.concat(genre)
+      setGenres(updatedGenres)
+      setGenre('')
+    }
   }
 
   return (

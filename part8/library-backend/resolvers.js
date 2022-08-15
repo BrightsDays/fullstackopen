@@ -28,18 +28,10 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      if (!args.author && !args.genre) {
+      if (!args.genre) {
         return Book.find({})
       }
-
-      if (!args.genre && args.author) {
-        return Book.find({ author: args.author })
-      }
-      if (!args.author && args.genre) {
-        return Book.find({ genres: { $in: [args.genre] } })
-      }
-
-      return Book.find({ author: args.author, genres: { $in: [args.genre] } })
+      return Book.find({ genres: { $in: [args.genre] } })
     },
     allAuthors: async () => Author.find({}),
     allGenres: async () => Genre.find({}),
