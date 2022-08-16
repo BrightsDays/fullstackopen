@@ -1,0 +1,7 @@
+{
+  "name": "library-frontend",
+  "version": "0.1.0",
+  "scripts": {
+    "calculateBmi": "ts-node -- bmiCalculator.ts"
+  }
+}
