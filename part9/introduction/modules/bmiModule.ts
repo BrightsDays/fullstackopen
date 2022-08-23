@@ -2,11 +2,11 @@ interface CalculatedBmi {
   height: number;
   weight: number;
   result: string;
-};
+}
 
 const calculateBmi = (height: number, weight: number): CalculatedBmi => {
-  const bmi = (weight / Math.pow(height, 2)) * 10000
-  let result = ''
+  const bmi = (weight / Math.pow(height, 2)) * 10000;
+  let result = '';
 
   if (bmi < 16) {
     result = 'Underweight (Severe thinness)';
@@ -37,7 +37,7 @@ const calculateBmi = (height: number, weight: number): CalculatedBmi => {
     height,
     weight,
     result
-  })
+  });
 };
 
 export { calculateBmi as bmiCalculator };

@@ -1,7 +1,7 @@
 interface BmiValues {
   height: number;
   weight: number;
-};
+}
 
 const parseBmiArguments = (args: Array<string>): BmiValues => {
   if (args.length < 4) throw new Error('Not enough arguments');
@@ -14,11 +14,11 @@ const parseBmiArguments = (args: Array<string>): BmiValues => {
     };
   } else {
     throw new Error('Provided values were not numbers!');
-  };
+  }
 };
 
 const calculateBmi = (height: number, weight: number): string => {
-  const bmi = (weight / Math.pow(height, 2)) * 10000
+  const bmi = (weight / Math.pow(height, 2)) * 10000;
 
   if (bmi < 16) {
     return('Underweight (Severe thinness)');
@@ -41,16 +41,15 @@ const calculateBmi = (height: number, weight: number): string => {
   if (bmi >= 35 && bmi < 40) {
     return('Obese (Class II)');
   }
-  if (bmi >= 40) {
-    return('Obese (Class III)');
-  }
+  
+  return('Obese (Class III)');
 };
 
 try {
   const { height, weight } = parseBmiArguments(process.argv);
   console.log(calculateBmi(height, weight));
 } catch (error: unknown) {
-  let errorMessage = 'Something bad happened.'
+  let errorMessage = 'Something bad happened.';
   if (error instanceof Error) {
     errorMessage += ' Error: ' + error.message;
   }

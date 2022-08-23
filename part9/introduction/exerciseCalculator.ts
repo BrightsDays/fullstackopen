@@ -8,12 +8,12 @@ interface Result {
   ratingDescription: RatingDescription;
   target: number;
   average: number;
-};
+}
 
 interface ExerciseValues {
   target: number;
   days: number[];
-};
+}
 
 const parseExerciseArguments = (args: Array<string>): ExerciseValues => {
   if (args.length < 4) throw new Error('Not enough arguments');
