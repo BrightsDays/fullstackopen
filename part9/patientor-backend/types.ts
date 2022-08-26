@@ -14,3 +14,5 @@ export interface Patient {
 }
 
 export type PatientInfo = Pick<Patient, 'id' | 'name' | 'gender' | 'occupation'>;
+
+export type NewPatientEntry = Omit<Patient, 'id'>;
