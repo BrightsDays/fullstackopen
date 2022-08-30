@@ -1,9 +1,10 @@
-import { Part } from "../../types";
+import { CoursePart } from "../../types";
+import Part from "./Part";
 
-const Content = ({ parts }: { parts: Array<Part>}) => {
-  const list = parts.map(item => {
-    return <p>{item.name} {item.exerciseCount}</p>
-  });
+const Content = ({ parts }: { parts: CoursePart[] }) => {
+  const list = parts.map(part => {
+    return <Part key={`prt_${part.name}`} {...part} />;
+  })
 
   return (
     <div>
