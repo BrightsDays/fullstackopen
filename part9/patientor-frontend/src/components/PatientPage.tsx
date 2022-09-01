@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 import { Patient } from "../types";
-import { useStateValue } from "../state";
+import { fetchPatient, useStateValue } from "../state";
 import { useEffect } from "react";
 
 const PatientPage = () => {
@@ -17,7 +17,7 @@ const PatientPage = () => {
             `${apiBaseUrl}/patients/${id}`
             );
           
-          dispatch({ type: "FETCH_PATIENT", payload: patientInfoFromApi });
+          dispatch(fetchPatient(patientInfoFromApi));
         } catch (error) {
           console.log(error);      
         }
