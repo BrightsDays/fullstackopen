@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
-import { Patient } from "../types";
-import { fetchPatient, useStateValue } from "../state";
+import { Diagnosis, Patient } from "../types";
+import { fetchPatient, setDiagnosisList, useStateValue } from "../state";
 import { useEffect } from "react";
 
 const PatientPage = () => {
-  const [ { patient }, dispatch] = useStateValue();
+  const [ { patient, diagnoses }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -23,7 +23,21 @@ const PatientPage = () => {
         }
       }
     };
+
+    const fetchDiagnosisList = async () => {
+        try {
+          const { data: diagnosesFromApi } = await axios.get<Diagnosis[]>(
+            `${apiBaseUrl}/diagnoses/`
+            );
+          
+          dispatch(setDiagnosisList(diagnosesFromApi));
+        } catch (error) {
+          console.log(error);      
+        }
+    };
+
     void fetchPatientInfo();
+    void fetchDiagnosisList();
   }, [dispatch]);
 
   const entries = patient 
@@ -33,7 +47,11 @@ const PatientPage = () => {
           <p>{item.date}</p>
           <p>{item.description}</p>
           <ul>
-            {item.diagnosisCodes && item.diagnosisCodes.map(item => <li key={`dgn_${item}`}>{item}</li>)}
+            {item.diagnosisCodes && Object.keys(diagnoses).length && item.diagnosisCodes.map(item => {
+              return (
+                <li key={`dgn_${item}`}>{item} {diagnoses[item].name}</li>
+              );
+            })}
           </ul>
         </div>
       );
