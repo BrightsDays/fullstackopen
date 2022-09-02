@@ -26,6 +26,20 @@ const PatientPage = () => {
     void fetchPatientInfo();
   }, [dispatch]);
 
+  const entries = patient 
+    ? patient.entries.map(item => {
+      return(
+        <div key={`entr_${item.id}`}>
+          <p>{item.date}</p>
+          <p>{item.description}</p>
+          <ul>
+            {item.diagnosisCodes && item.diagnosisCodes.map(item => <li key={`dgn_${item}`}>{item}</li>)}
+          </ul>
+        </div>
+      );
+    })
+    : [];
+
   return (
     <div>
       { !patient && <p>Something went wrong...</p>}
@@ -35,6 +49,9 @@ const PatientPage = () => {
           <p>gender: {patient.gender}</p>
           <p>ssn: {patient.ssn}</p>
           <p>occupation: {patient.occupation}</p>
+          
+          <h3>Entries</h3>
+          { entries }
         </div>
       }
     </div>

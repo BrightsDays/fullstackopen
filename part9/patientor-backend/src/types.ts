@@ -1,23 +1,7 @@
-export interface Diagnosis {
-  code: string;
-  name: string;
-  latin?: string;
-}
-
 export enum Gender {
-  Male = "male",
-  Female = "female",
-  Other = "other"
-}
-
-export interface Patient {
-  id: string;
-  name: string;
-  occupation: string;
-  gender: Gender;
-  ssn?: string;
-  dateOfBirth?: string;
-  entries: Entry[];
+  Male = 'male',
+  Female = 'female',
+  Other = 'other',
 }
 
 export enum HealthCheckRating {
@@ -56,6 +40,28 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
     endDate: string;
   };
 }
+
+export interface Diagnosis {
+  code: string;
+  name: string;
+  latin?: string;
+}
+
+export interface Patient {
+  id: string;
+  name: string;
+  dateOfBirth: string;
+  ssn: string;
+  gender: string;
+  occupation: string;
+  entries: Entry[];
+}
+
+export type PatientInfo = Pick<Patient, 'id' | 'name' | 'gender' | 'occupation' >;
+
+export type NewPatientEntry = Omit<Patient, 'id'>;
+
+export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
 
 export type Entry =
   | HospitalEntry
