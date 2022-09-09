@@ -5,10 +5,10 @@ export enum Gender {
 }
 
 export enum HealthCheckRating {
-  "Healthy" = 0,
-  "LowRisk" = 1,
-  "HighRisk" = 2,
-  "CriticalRisk" = 3
+  Healthy = 0,
+  LowRisk = 1,
+  HighRisk = 2,
+  CriticalRisk = 3
 }
 
 export interface BaseEntry {
@@ -20,7 +20,7 @@ export interface BaseEntry {
 }
 
 export interface HealthCheckEntry extends BaseEntry {
-  type: "HealthCheck";
+  type: 'HealthCheck';
   healthCheckRating: HealthCheckRating;
 }
 
@@ -61,9 +61,20 @@ export type PatientInfo = Pick<Patient, 'id' | 'name' | 'gender' | 'occupation' 
 
 export type NewPatientEntry = Omit<Patient, 'id'>;
 
+export type NewEntriesEntry = Omit<EntriesEntry, 'id'>;
+
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
 
 export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
+
+export type NewHealthCheckEntry = Omit<HealthCheckEntry, 'id'>;
+export type NewHospitalEntry = Omit<HospitalEntry, 'id'>;
+export type NewOccupationalHealthcareEntry = Omit<OccupationalHealthcareEntry, 'id'>;
+
+export type EntriesEntry = 
+  | NewHealthCheckEntry
+  | NewHospitalEntry
+  | NewOccupationalHealthcareEntry;

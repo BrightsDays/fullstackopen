@@ -1,6 +1,7 @@
 import express from "express";
 import patientService from "../services/patientService";
-import toNewPatientEntry from "../utils";
+import { EntriesEntry } from "../types";
+import { toNewPatientEntry, toNewOccupationalHealthcareEntry, toNewHospitalEntry, toNewHealthCheckEntry } from "../utils";
 
 const router = express.Router();
 
@@ -23,6 +24,37 @@ router.post('/', (req, res) => {
     const newPatientEntry = toNewPatientEntry(req.body);
     const addedPatient = patientService.addPatient(newPatientEntry);
     res.json(addedPatient);
+  } catch (error: unknown) {
+    let errorMessage = 'Something went wrong.';
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    res.status(400).send(errorMessage);
+  }
+});
+
+router.post('/:id/entries', (req, res) => {
+  let newEntry: EntriesEntry | null  = null;
+
+  try {
+    switch (req.body.type) {
+      case 'Hospital':
+        newEntry = toNewHospitalEntry(req.body);
+        break;
+      case 'HealthCheck':
+        newEntry = toNewHealthCheckEntry(req.body);
+        break;
+      case 'OccupationalHealthcare':
+        newEntry = toNewOccupationalHealthcareEntry(req.body);
+        break;
+      default:
+        break;
+    };
+
+    if (newEntry) {
+      const addedEntry = patientService.addEntry(newEntry, req.path.slice(1, 37));
+      res.json(addedEntry);
+    }
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.';
     if (error instanceof Error) {
