@@ -2,8 +2,9 @@ import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Field, Formik, Form } from "formik";
 
-import { TextField, SelectField, HealthCheckOption } from "../components/FormField";
-import { HealthCheckRating, HealthCheckEntry } from "../types";
+import { TextField, SelectField, HealthCheckOption, DiagnosisSelection, TypeOption } from "../components/FormField";
+import { HealthCheckRating, HealthCheckEntry, EntryType } from "../types";
+import { useStateValue } from "../state";
 
 export type EntryFormValues = Omit<HealthCheckEntry, "id" | "type">;
 
@@ -19,10 +20,19 @@ const healthCheckOptions: HealthCheckOption[] = [
   { value: HealthCheckRating.CriticalRisk, label: "CriticalRisk" }
 ];
 
+const typeOptions: TypeOption[] = [
+  { value: EntryType.HealthCheck, label: 'Health check'},
+  { value: EntryType.Hospital, label: 'Hospital'},
+  { value: EntryType.OccupationalHealthcare, label: 'Occupational healthcare'}
+];
+
 export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
+  const [{ diagnoses }] = useStateValue();
+
   return (
     <Formik
       initialValues={{
+        type: EntryType.HealthCheck,
         description: "",
         date: "",
         specialist: "",
@@ -51,9 +61,10 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         return errors;
       }}
     >
-      {({ isValid, dirty }) => {
+      {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
           <Form className="form ui">
+            <SelectField label="Type" name="type" options={typeOptions} />
             <Field
               label="Date"
               placeholder="YYYY-MM-DD"
@@ -72,11 +83,10 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               name="specialist"
               component={TextField}
             />
-            <Field
-              label="Diagnosis Codes"
-              placeholder="Diagnosis Codes"
-              name="diagnosisCodes"
-              component={TextField}
+            <DiagnosisSelection
+              setFieldValue={setFieldValue}
+              setFieldTouched={setFieldTouched}
+              diagnoses={Object.values(diagnoses)}
             />
             <SelectField label="Health check" name="healthCheckRating" options={healthCheckOptions} />
             <Grid>

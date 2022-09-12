@@ -11,6 +11,10 @@ const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
 };
 
+const isNumber = (number: unknown): number is number => {
+  return typeof number === 'number' || number instanceof Number;
+};
+
 const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {
     throw new Error('Incorrect or missing name');
@@ -89,12 +93,12 @@ const parseDiagnosisCodes = (diagnosisCodes: unknown): string[] => {
   return diagnosisCodes;
 };
 
-const isHealthCheckRating = (param: any): param is HealthCheckRating => {
+const isHealthCheckRating = (param: any): param is HealthCheckRating => {  
   return Object.values(HealthCheckRating).includes(param);
 };
 
 const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
-  if (!rating || !isString(rating) || !isHealthCheckRating(rating)) {
+  if (!rating || !isNumber(rating) || !isHealthCheckRating(rating)) {
     throw new Error('Incorrect or missing health check rating');
   }
   
