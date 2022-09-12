@@ -68,6 +68,8 @@ const PatientPage = () => {
       return;
     }
 
+    console.log(values);
+    
     try {
       const { data: newEntry } = await axios.post<Entry>(
         `${apiBaseUrl}/patients/${id}/entries`,
