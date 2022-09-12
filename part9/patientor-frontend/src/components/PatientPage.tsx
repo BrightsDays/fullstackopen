@@ -67,8 +67,6 @@ const PatientPage = () => {
       setError("Something went wrong with this patient ID!");
       return;
     }
-
-    console.log(values);
     
     try {
       const { data: newEntry } = await axios.post<Entry>(
@@ -100,7 +98,7 @@ const PatientPage = () => {
               margin: '10px 0', 
               padding: '5px' }}
           >
-          <p>{item.date}</p>
+          <p>{item.date} - {item.type}</p>
           <p><i>{item.description}</i></p>
           { item.type === 'HealthCheck' && 
             <FavoriteIcon htmlColor={colorCodes[item.healthCheckRating]} />
